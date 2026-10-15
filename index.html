@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>deepcheck. | Spot the deepfake</title>
+<meta name="description" content="Two educational quizzes that help you recognise deepfakes. NeCCSus HackFest '26 - Deepfake Era.">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0d0b'/%3E%3Cpath d='m8 16 5 5 11-11' fill='none' stroke='%235ee092' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- INTRO -->
+<div id="intro" class="intro-screen" role="dialog" aria-modal="true" aria-label="Introduction">
+  <button class="intro-skip" id="introSkip" type="button">Skip intro</button>
+  <div class="intro-inner">
+    <p class="tag">Incoming transmission</p>
+    <div id="introText" class="intro-text" aria-live="polite"></div>
+    <button class="btn primary intro-enter" id="introEnter" type="button" hidden>Enter the site <i class="arr">&#8599;</i></button>
+  </div>
+  <div class="intro-bar"><span id="introBar"></span></div>
+</div>
+<noscript><style>#intro{display:none!important}</style></noscript>
+
+
+<header class="top">
+  <a class="wordmark" href="#home" data-nav="home" aria-label="deepcheck. home">deepcheck<span>.</span></a>
+  <span class="header-note mono">NeCCSus HackFest '26</span>
+</header>
+<div class="site-shell">
+  <nav class="side-nav" aria-label="Main">
+    <p class="nav-label mono">Take a closer look</p>
+    <a href="#home" data-nav="home" class="nav-button"><span><small>01</small>Home</span><i aria-hidden="true">&#8599;</i></a>
+    <a href="#quiz" data-nav="quiz" class="nav-button"><span><small>02</small>Scenario quiz</span><i aria-hidden="true">&#8599;</i></a>
+    <a href="#spot" data-nav="spot" class="nav-button"><span><small>03</small>Spot a deepfake</span><i aria-hidden="true">&#8599;</i></a>
+    <a href="#about" data-nav="about" class="nav-button"><span><small>04</small>About</span><i aria-hidden="true">&#8599;</i></a>
+  </nav>
+  <main id="main" tabindex="-1">
+    <section class="view" id="view-home" data-view="home">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="tag">Deepfake Era &middot; NeCCSus HackFest '26</p>
+          <h1>Take a<br>closer look<span class="accent">.</span></h1>
+          <p class="intro">Train your eye to spot fake faces, voices and videos.</p>
+          <p class="home-direction">Choose a quiz from the menu. Test what you know, then see if you can tell real media from fake.</p>
+          <p class="round-stat"><strong>10</strong><span>questions per mixed round</span></p>
+        </div>
+        <article class="card deepfake-info">
+          <p class="mono info-label">Know what you're looking at</p>
+          <h2>What is a<br>deepfake?</h2>
+          <p>A deepfake is an image, video or audio clip created or changed using AI to make a person appear to say or do something they never did.</p>
+          <div class="info-check"><span class="mono">01</span><div><h3>Look at the details</h3><p>Check face edges, lighting, hands and reflections. In videos, watch for flickering or mismatched lip movements.</p></div></div>
+          <div class="info-check"><span class="mono">02</span><div><h3>Check the source</h3><p>Find the original post and compare it with reliable sources before believing or sharing it.</p></div></div>
+          <div class="info-check"><span class="mono">03</span><div><h3>Clues are not proof</h3><p>Real media can look unusual, and convincing fakes can look natural. Verify the context too.</p></div></div>
+        </article>
+      </div>
+    </section>
+
+<section class="view quiz-view" id="view-quiz" data-view="quiz" hidden>
+  <div class="panel-head">
+    <p class="tag">Scenario quiz</p>
+    <h2>Put your instincts<br>to the test.</h2>
+    <p class="sub">Choose visual clues, audio & video, or source verification. Get an explanation after every answer.</p>
+  </div>
+  <div id="quizIntro" class="card quiz-setup">
+    <label class="field-label" for="quizCategory">Choose a category</label>
+    <select id="quizCategory"><option value="all">All categories</option><option value="visual">Visual clues</option><option value="audio">Audio & video</option><option value="verification">Source verification</option></select>
+    <fieldset class="mode-picker">
+      <legend>Choose your mode</legend>
+      <label class="mode-option"><input type="radio" name="quizMode" value="practice" checked><span><strong>Practice</strong><small>Take your time. Read each explanation.</small></span></label>
+      <label class="mode-option"><input type="radio" name="quizMode" value="timed"><span><strong>Timed</strong><small>30 seconds per question. The timer stops for feedback.</small></span></label>
+    </fieldset>
+    <div class="setup-bottom"><p class="mono" id="quizBest">Best score: &ndash;</p><button class="btn primary" id="quizStart" type="button">Begin quiz <i class="arr">&#8599;</i></button></div>
+    <p class="note" id="quizRoundInfo"></p>
+  </div>
+  <div id="quizPlay" class="card" hidden>
+    <div class="question-meta"><p class="mono" id="quizCount"></p><span class="category-label" id="quizQuestionCategory"></span><span class="timer" id="quizTimer" role="timer" aria-live="off" hidden></span></div>
+    <div class="progress" role="progressbar" aria-label="Questions answered" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" id="quizBar"><span></span></div>
+    <h3 id="quizQ" tabindex="-1"></h3>
+    <figure class="quiz-media" id="quizMedia" hidden><img id="quizImage" alt="" decoding="async"><figcaption id="quizMediaCaption"></figcaption></figure>
+    <p class="note media-error" id="quizMediaError" role="status" hidden>The sample could not load. Check that the media folder is beside index.html, then retry.</p>
+    <div class="opts" id="quizOpts"></div>
+    <div class="explain" id="quizWhy" hidden aria-live="polite"></div>
+    <button class="btn primary" id="quizNext" type="button" hidden>Next question <i class="arr">&#8599;</i></button>
+    <button class="linkbtn back-link" id="quizExit" type="button">Back to quiz settings</button>
+  </div>
+  <div id="quizEnd" class="card" hidden>
+    <p class="tag">Round complete</p>
+    <div class="big-score"><span id="quizScore">0</span><small id="quizTotal">/10</small></div>
+    <h3 id="quizRank" tabindex="-1"></h3>
+    <p class="sub result-msg" id="quizMsg"></p>
+    <div class="cta"><button class="btn primary" id="quizReviewBtn" type="button">Review missed questions <i class="arr">&#8599;</i></button><button class="btn ghost" id="quizAgain" type="button">Play again</button><button class="btn ghost" id="quizSettings" type="button">Change settings</button></div>
+  </div>
+  <div id="quizReview" hidden>
+    <div class="review-heading"><h3 id="quizReviewTitle" tabindex="-1">Your missed questions</h3><button class="btn ghost" id="quizBackResults" type="button">Back to results</button></div>
+    <div class="review-list" id="quizReviewList"></div>
+  </div>
+</section>
+
+<section class="view quiz-view" id="view-spot" data-view="spot" hidden>
+  <div class="panel-head">
+    <p class="tag">Media quiz</p>
+    <h2>Can you spot<br>a deepfake?</h2>
+    <p class="sub">Look at each supplied photo or GIF sample, choose real or fake, then read the basic explanation.</p>
+  </div>
+  <div id="spotIntro" class="card quiz-setup">
+    <label class="field-label" for="spotCategory">Choose a category</label>
+    <select id="spotCategory"><option value="all">Photos + GIF samples</option><option value="photo">Photos</option><option value="gif">GIF samples</option></select>
+    <fieldset class="mode-picker">
+      <legend>Choose your mode</legend>
+      <label class="mode-option"><input type="radio" name="spotMode" value="practice" checked><span><strong>Practice</strong><small>Take your time. Read each explanation.</small></span></label>
+      <label class="mode-option"><input type="radio" name="spotMode" value="timed"><span><strong>Timed</strong><small>30 seconds per question. The timer stops for feedback.</small></span></label>
+    </fieldset>
+    <div class="setup-bottom"><p class="mono" id="spotBest">Best score: &ndash;</p><button class="btn primary" id="spotStart" type="button">Begin quiz <i class="arr">&#8599;</i></button></div>
+    <p class="note" id="spotRoundInfo"></p>
+  </div>
+  <div id="spotPlay" class="card" hidden>
+    <div class="question-meta"><p class="mono" id="spotCount"></p><span class="category-label" id="spotQuestionCategory"></span><span class="timer" id="spotTimer" role="timer" aria-live="off" hidden></span></div>
+    <div class="progress" role="progressbar" aria-label="Questions answered" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" id="spotBar"><span></span></div>
+    <h3 id="spotQ" tabindex="-1"></h3>
+    <figure class="quiz-media" id="spotMedia" hidden><img id="spotImage" alt="" decoding="async"><figcaption id="spotMediaCaption"></figcaption></figure>
+    <p class="note media-error" id="spotMediaError" role="status" hidden>The sample could not load. Check that the media folder is beside index.html, then retry.</p>
+    <div class="opts" id="spotOpts"></div>
+    <div class="explain" id="spotWhy" hidden aria-live="polite"></div>
+    <button class="btn primary" id="spotNext" type="button" hidden>Next question <i class="arr">&#8599;</i></button>
+    <button class="linkbtn back-link" id="spotExit" type="button">Back to quiz settings</button>
+  </div>
+  <div id="spotEnd" class="card" hidden>
+    <p class="tag">Round complete</p>
+    <div class="big-score"><span id="spotScore">0</span><small id="spotTotal">/10</small></div>
+    <h3 id="spotRank" tabindex="-1"></h3>
+    <p class="sub result-msg" id="spotMsg"></p>
+    <div class="cta"><button class="btn primary" id="spotReviewBtn" type="button">Review missed questions <i class="arr">&#8599;</i></button><button class="btn ghost" id="spotAgain" type="button">Play again</button><button class="btn ghost" id="spotSettings" type="button">Change settings</button></div>
+  </div>
+  <div id="spotReview" hidden>
+    <div class="review-heading"><h3 id="spotReviewTitle" tabindex="-1">Your missed questions</h3><button class="btn ghost" id="spotBackResults" type="button">Back to results</button></div>
+    <div class="review-list" id="spotReviewList"></div>
+  </div>
+</section>
+<!-- ABOUT -->
+<section class="view" id="view-about" data-view="about" hidden>
+  <div class="panel-head">
+    <p class="tag">About</p>
+    <h2>Built for the deepfake era</h2>
+  </div>
+  <div class="card prose">
+    <p>deepcheck. is a static educational game made for <strong>NeCCSus HackFest '26</strong> (theme: Deepfake Era), under the project type <em>"a simple game or quiz."</em></p>
+    <p>It teaches people to question media instead of trusting it. It runs fully in your browser: no account, no uploads, no server. Your best score is stored only on your own device.</p>
+    <p><strong>Important:</strong> this site does not run an AI detector on your files. It trains human judgement, which stays useful whichever tools come and go.</p>
+    <p class="mono">Programmers' Den &middot; CCS Student Council</p>
+	<p class="mono">website by: Javier, John Richard F. | Vidal, Jersley A. | Quiambao, Ravenjosh P.  &middot; CCS Programmers' Den</p>
+  </div>
+</section>
+
+  </main>
+</div>
+<footer class="foot"><span>deepcheck<span class="accent">.</span> &middot; NeCCSus HackFest '26</span><span class="mono">Think before you share. &middot; <button class="linkbtn" id="replayIntro" type="button">Replay intro</button></span></footer>
+<script src="app.js"></script>
+</body>
+</html>
