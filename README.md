@@ -27,10 +27,6 @@ Keep all the files and the `media` folder together. You do not need to install a
 - `app.js` — the quizzes, timer and scoring.
 - `media/` — the photos and GIF samples.
 
-## GIF note
-
-The supplied GIF files contain still images. To make them move, replace them with the original animated GIFs. Keep the same filenames.
-
 ## Reminder
 
 This is a learning quiz, not an automatic deepfake detector. The media answers follow the real/fake labels supplied with the files.
