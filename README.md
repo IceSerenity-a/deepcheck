@@ -27,6 +27,10 @@ Keep all the files and the `media` folder together. You do not need to install a
 - `app.js` — the quizzes, timer and scoring.
 - `media/` — the photos and GIF samples.
 
+## GIF note
+
+The supplied GIF files contain still images. To make them move, replace them with the original animated GIFs. Keep the same filenames.
+
 ## Reminder
 
 This is a learning quiz, not an automatic deepfake detector. The media answers follow the real/fake labels supplied with the files.
@@ -37,4 +41,11 @@ Made for **NeCCSus HackFest '26**.
 
 **Programmers' Den · CCS Student Council**
 
-AI tools used: Claude for the original website, and ChatGPT/Codex for the updates.
+## AI Documentation
+
+We used the following AI tools to help build this project:
+
+- **Claude:** Generated the original website, including its HTML, CSS and JavaScript.
+- **ChatGPT/Codex:** Helped update the design from red and black to green and black, move and enlarge the navigation buttons, expand the quiz with categories, timed mode and missed-answer review, remove the X-ray and forensics features, and simplify this README.
+
+Our team assumes full responsibility for all AI-assisted work, including the code, content, accuracy and final submission. We are responsible for reviewing and testing the website before submitting it.
