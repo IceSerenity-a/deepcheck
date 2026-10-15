@@ -46,6 +46,6 @@ Made for **NeCCSus HackFest '26**.
 We used the following AI tools to help build this project:
 
 - **Claude:** Generated the original website, including its HTML, CSS and JavaScript.
-- **ChatGPT/Codex:** Helped update the design from red and black to green and black, move and enlarge the navigation buttons, expand the quiz with categories, timed mode and missed-answer review, remove the X-ray and forensics features, and simplify this README.
+- **ChatGPT/Codex:** Helped update the design from red and black to green and black, move and enlarge the navigation buttons, and simplify this README.
 
 Our team assumes full responsibility for all AI-assisted work, including the code, content, accuracy and final submission. We are responsible for reviewing and testing the website before submitting it.
